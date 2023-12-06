@@ -1,4 +1,4 @@
-NAME = Megaphone
+NAME = HiBrain
 
 CC = c++
 
