@@ -2,12 +2,12 @@
 
 int main (void)
 {
-	Fixed		a;
-	Fixed const	b(10);
-	Fixed const	c(42.42f);
-	Fixed const	d(b);
+	Fixed a;
+	Fixed const b( 10 );
+	Fixed const c( 42.42f );
+	Fixed const d( b );
+	a = Fixed( 1234.4321f );
 
-	a = Fixed(1234.4321f);
 	std::cout<<"A: "<<a<<std::endl;
 	std::cout<<"B: "<<b<<std::endl;
 	std::cout<<"C: "<<c<<std::endl;
@@ -16,5 +16,9 @@ int main (void)
 	std::cout<<"B as integer: "<<b.toInt()<<std::endl;
 	std::cout<<"C as integer: "<<c.toInt()<<std::endl;
 	std::cout<<"D as integer: "<<d.toInt()<<std::endl;
+	std::cout<<"A as float: "<<a.toFloat()<<std::endl;
+	std::cout<<"B as float: "<<b.toFloat()<<std::endl;
+	std::cout<<"C as float: "<<c.toFloat()<<std::endl;
+	std::cout<<"D as float: "<<d.toFloat()<<std::endl;
 	return (0);
 }

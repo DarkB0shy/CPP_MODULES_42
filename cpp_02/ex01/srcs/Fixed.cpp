@@ -4,9 +4,9 @@ Fixed::Fixed (void) {this->_number = 0;}
 
 Fixed::Fixed (const Fixed &f) {*this = f;} //Copy constructor. Creates a copy
 
-Fixed::Fixed (const int n) {this->_number = (n * (1 << this->_bits));}
+Fixed::Fixed (const int n) {this->_number = n * 256;} // 256 == 1 << n_bits (n_bits == 8)
 
-Fixed::Fixed (const float fp) {this->_number = roundf(fp * (1 << this->_bits));}
+Fixed::Fixed (const float fp) {this->_number = roundf(fp * 256);}
 
 Fixed	&Fixed::operator=(const Fixed &f) //Copy assignment operator. "Updates" the copy
 {
@@ -16,13 +16,7 @@ Fixed	&Fixed::operator=(const Fixed &f) //Copy assignment operator. "Updates" th
 	return (*this);
 }
 
-float	Fixed::toFloat(void) const
-{
-	float	tmp;
-
-	tmp = (((float)this->_number / (float)(1 << this->_bits)));
-	return (tmp);
-}
+float	Fixed::toFloat(void) const {return ((float)this->_number / 256.0);}
 
 int	Fixed::toInt(void) const {return (roundf(this->toFloat()));}
 
