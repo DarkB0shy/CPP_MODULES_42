@@ -1,7 +1,7 @@
 #ifndef DOG_H
 #define DOG_H
 
-#include "Animal.hpp"
+#include "Aanimal.hpp"
 #include "Brain.hpp"
 
 #define DOG_CONST "Dog constructor was called.\n"

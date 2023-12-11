@@ -11,6 +11,8 @@
 #define DOG_SOUND "Bark\n"
 
 class Dog : public virtual Animal {
+	private:
+		std::string	_type = DOG_TYPE;
 	public:
 		Dog(void);
 		Dog (const Dog &d);

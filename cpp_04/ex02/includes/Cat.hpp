@@ -1,7 +1,7 @@
 #ifndef CAT_HPP
 #define CAT_HPP
 
-#include "Animal.hpp"
+#include "Aanimal.hpp"
 #include "Brain.hpp"
 
 #define CAT_DEF_CONST "Cat default constructor was called.\n"

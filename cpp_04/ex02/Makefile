@@ -4,7 +4,7 @@ CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCS = main.cpp srcs/Animal.cpp srcs/Cat.cpp srcs/Dog.cpp srcs/Brain.cpp
+SRCS = main.cpp srcs/Aanimal.cpp srcs/Cat.cpp srcs/Dog.cpp srcs/Brain.cpp
 
 OBJS = ${SRCS:.cpp=.o}
 

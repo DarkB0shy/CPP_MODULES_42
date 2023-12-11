@@ -13,6 +13,7 @@
 
 class Cat : public virtual Animal {
 	private:
+		std::string	_type = CAT_TYPE;
 		Brain	*_brain;
 	public:
 		Cat(void);

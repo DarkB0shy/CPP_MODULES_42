@@ -11,6 +11,8 @@
 #define CAT_SOUND "Miao\n"
 
 class Cat : public virtual Animal {
+	private:
+		std::string	_type = CAT_TYPE;
 	public:
 		Cat(void);
 		Cat(const Cat &c);
