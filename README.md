@@ -7,13 +7,3 @@ CPP_02 : This module is designed to help you understand Ad-hoc polymorphism, ove
 CPP_03 : This module is designed to help you understand Inheritance in CPP.
 
 CPP_04 : This module is designed to help you understand Subtype polymorphism, abstract classes and interfaces in CPP.
-
-CPP_05 : This module is designed to help you understand Try/Catch and Exceptions in CPP.
-
-CPP_06 : This module is designed to help you understand the different casts in CPP.
-
-CPP_07 : This module is designed to help you understand Templates in CPP.
-
-CPP_08 : This module is designed to help you understand templated containers, iterators and algorithms in CPP.
-
-CPP_09 : This module is designed to help you understand the containers in CPP.
