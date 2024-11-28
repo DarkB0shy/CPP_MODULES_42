@@ -1,0 +1,56 @@
+https://dl.acm.org/doi/pdf/10.1145/286936.286948
+
+Introduction
+
+Dynamic memory management in C++ is complex, 
+especially across the boundaries of library abstract data 
+types. C++ libraries designed in the orthodox canonical 
+form (OCF) alleviate some of the problems by ensuring 
+that classes which manage any kind of heap structures 
+faithfully copy and delete these. 
+
+Orthodox Canonical Form (OCF)
+
+According to a well-known design tenet in C++, classes 
+which manage any kind of heap memory structures should 
+always provide: a default constructor, a copy constructor, 
+an assignment operator and a destructor, chiefly to ensure 
+that heap memory structures are copied and deleted 
+correctly. 
+Classes which provide these explicitly are said 
+to conform to the orthodox canonical form (OCF) [Cope92].
+If these operations are not provided explicitly, 
+the compiler will automatically generate default versions, 
+which, unfortunately, usually behave in the wrong way, 
+because they assume that an object is a shallow structure.
+
+Safety Issues in OCF
+
+Say a simple Stack variable stk1 is copied to another
+variable stk2 (possibly by assignment, or by passing
+stk1 by value into a formal argument stk2). 
+By default, the Stack data members are shallow-copied, 
+with the consequence that although stk1 and stk2 
+maintain separate information about the _capacity 
+and active _size of the stack, they both share the
+same heap storage _block, whose address only was copied.
+If stk1 and skt2 are intended to be separate objects, a sequence 
+of pop () and push () operations performed on stk2 will 
+adversely affect stk1, by modifying the elements stored. 
+
+    Apart from this undesired aliasing of Stack states,
+    another practical reason to be concerned over accidental 
+    sharing is that the memory reclamation mechanism provided in C++
+    assumes heap structures are locally owned. If stk2 goes out of scope,
+    the destructor ~Stack() will delete the shared _block, leaving a
+    dangling pointer from stk1. Subsequent operations upon skt1
+    are likely to lead to a memory segmentation fault and program failure.
+    Instead, we would rather that copying stk1 procudec stk3, which has a
+    deep copy of the storage _block. To achieve this, an OCF-conformant
+    Stack must provide both a "copy constructor" Stack (const Stack&) and 
+    an "assignment operator" Stack& operator=(const Stack&) 
+    which take deep copies of the heap _block, in order to prevent
+    accidental memory sharing. A default constructor Stack () ensures
+    that dynamic memory is properly initialized and a destructor ~Stack()
+    may now safely assume that each Stack variable controls its own 
+    heap structure, when it deletes this. 

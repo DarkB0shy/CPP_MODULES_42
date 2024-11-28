@@ -1,0 +1,205 @@
+CPP module 09 states: once a container is used in one of these module's exs, it can not be used
+for the rest of the module. Last ex (the one about the Ford-Johnson algorithm) uses two containers.
+
+
+
+				Exercise 00 : Bitcoin exchange
+
+Create a program which outputs the value of a certain amount of btcs on a certain date. It will
+use a ".csv" database holding bitcoin prices over time. The only argument this program accepts
+is a second "database" that will store the different prices-dates to calculate.
+
+Program's name is "btc"; it will take only one file as argument; each line of this file must follow
+the format "data | value"; any valid date must be in the format "year-month-day"; any valid bitcoin
+value must be between 0 and 1000. Errors SHOULD be handled. Example of a valid input.txt file:
+
+date | value
+ 2011-01-03 | 3
+ 2011-01-03 | 2
+ 2011-01-03 | 1
+ 2011-01-03 | 1.2
+ 2011-01-09 | 1
+ 2012-01-11 |-1
+ 2001-42-42
+ 2012-01-11 | 1
+ 2012-01-11 | 2147483648
+
+Example of an output:
+
+$> ./btc
+ Error: could not open file.
+ $> ./btc input.txt
+ 2011-01-03 => 3 = 0.9
+ 2011-01-03 => 2 = 0.6
+ 2011-01-03 => 1 = 0.3
+ 2011-01-03 => 1.2 = 0.36
+ 2011-01-09 => 1 = 0.32
+ Error: not a positive number.
+ Error: bad input => 2001-42-42
+ 2012-01-11 => 1 = 7.1
+ Error: too large a number.
+
+The program shall display on stdout the # of bitcoins (under the "value" label in the 2nd file)
+multiplied by the exchange rate held in the ".csv" database. If the date in the input.txt does not
+exist in the ".csv" the program must use the closest lower date.
+
+For example the first line of the output should be "2011-01-03 => 3 = 0.9" as according to the
+".csv", btc exchange rate was 0.3. All dates are valid inside the db given by the subject.
+
+First of all, the program should properly parse the input.txt and store only the information that
+follows the right format. Then it should open the ".csv" outside of the main loop, fetch
+the value of btc on the valid date, multiply that value * the # of btcs on the given date
+for all the given dates, then close the file. Any container can be used for this scope, even
+the mutantStack. Is it necessary? Not at all. Will I do it? Maybe.
+
+
+
+				Exercise 01 : Reverse Polish Notation
+
+Program's name is RPN; it will only take an inverted Polish mathematical expression as an argument;
+the numbers passed as an argument can't be more than 10; the program must process and execute the
+expression on the stdout; error messages should be displayed on std::cerr; only handle "+-/*".
+The reverse polish notation is a way to write expressions where operations come after a pair of
+numbers, not in between them. So "8 8 *" is 64 and "8 9 * 9- 9- 9- 4- 1 +" equals 42.
+
+The RPN class will have this one function, double RPN::calc(const std::string&), which calculates
+expressions written in Reverse Polish Notation.
+A static class could be implemented for this scope, and this member function should do the job:
+
+void RPN::performOperation ( std::string const &op, std::stack<double> &nums ) {
+  
+  double a, b;
+  std::map <std::string, double(*)(double, double)> operations;
+  operations["+"] = &RPN::add;
+  operations["-"] = &RPN::sub;
+  operations["*"] = &RPN::mlt;
+  operations["/"] = &RPN::div;
+
+  if (nums.size() < 2)
+    throw RPN::execErrorException();
+  b = nums.top();
+  nums.pop();
+  a = nums.top();
+  nums.pop();
+
+  if (operations.find(op) != operations.end())
+    nums.push(operations[op](a, b));
+}
+
+
+
+				  Exercise 02 : Pmerge me
+
+The name of the program will be PmergeMe; it will parse a positive integer sequence as argument; it
+will be using the merge-insert sort algorithm; errors should be displayed on std::cerr.
+At least two different containers must be used and the program must be able to handle at least
+3000 numbers. The algorithm shall be implemented for each container you choose rather than using a
+generic function.
+
+Here is an example of the expected program output:
+
+ $> ./PmergeMe 3 5 9 7 4
+ Before: 3 5 9 7 4
+ After:3 4 5 7 9
+ Time to process a range of 5 elements with std::[..] : 0.00031 us
+ Time to process a range of 5 elements with std::[..] : 0.00014 us
+ $> ./PmergeMe `shuf-i 1-100000-n 3000 | tr "\n" " "`
+ Before: 141 79 526 321 [...]
+ After: 79 141 321 526 [...]
+ Time to process a range of 3000 elements with std::[..] : 62.14389 us
+ Time to process a range of 3000 elements with std::[..] : 69.27212 us
+ $> ./PmergeMe "-1" "2"
+ Error
+
+Duplicates in the numbers sequence may or may not be handled as errors. Also, an explicit message
+must be printed on the std::out stating how long did the sorting take by both of the containers.
+
+	Something about Ford-Johnson algorithm
+
+It is a combination of two well known techinques: insertion sort and merge sort.
+
+	Insertion sort : (example: deck of cards) you pick up one card from the deck every iteration
+			then insert it in the correct order in the cards you have in your hand.
+			This is a comparison based algorithm. It compares the elements and sorts
+			them based on comparisons. You will end up having a sorted "hand",
+			from left to right. This works well on small datasets.
+
+	Merge sort : this is slightly more powerful. If you were to have a big ol' stack o' papers
+			it would be stupid to try and sort them all at the same time. What smart
+			people do is they divide the stack into smaller and smaller stacks until
+			they are left with individual sheets of paper or tiny chunks. Then they
+			first sort those, last step is to merge all of the small "sorted" stacks to
+			rebuild the original stack, in the correct order.
+			This works way better on larger datasets; but is more complicated and
+			requires more space for it creates subarrays.
+
+The merge sort algorithm handles datasets in O(n log n) time. The insertion sort in O(n^2), making
+it a worse choice for larger datasets.
+
+The Ford-Johnson algorithm gets the best out of these methods and works as follows:
+	1 : Divide the list into smaller sublists
+		This step is similar to merge-sort.
+	2 : Use insertion sort on the smaller sublists
+		The sub-groups are sorted with a "modified version" of insertion sort. This makes
+		the overall process faster.
+	3 : Merge the sorted chunks
+		This step is similar to merge-sort.
+	4 : Reinsert elements when/if necessary
+		During the 3rd step the algorithm has to re-insert elements into different parts of
+		the already sorted list to ensure the final result will be correct. This step is
+		where the algorithm gets its name from. This algorithm carefully attempts to
+		merge chunks instead of "manually" sorting them.
+
+	A deeper take on merge-sort
+
+First step is to break the unsorted list into sublists, until each one of them has only one element.
+A single element array is always sorted. Then you "sort and merge" the sublists.
+Let's say you have this list:
+[38, 27, 43, 3, 9, 82, 10]
+You split the list into halves, if the list has an odd number of elements, just split as evenly
+as possible:
+[38, 27, 43] [3, 9, 82, 10]
+Now you keep splitting these halves until all sublists are holding one element:
+[38, 27, 43] -> [38], [27, 43]
+[3, 9, 82, 10] -> [3, 9], [82, 10]
+[27, 43] -> [27], [43]
+Last split:
+[3, 9] -> [3], [9]
+[82, 10] -> [82], [10]
+You are left with individual items: [38], [27], [43], [3], [9], [82], [10]
+
+Now: merge (or compare) 27 and 43. The merged list becomes [27, 43].
+Merge 38 with [27, 43]. This compares 38 with 27 and with 43. The merged list becomes [27, 38, 43].
+
+Now you merge 3 and 9. Merged list becomes [3, 9]. Merge 82 and 10, [10, 82].
+
+Now you start merging sublists. Merge [3, 9] with [10, 82]. 3 < 10 and 9 < 10, so the merged list
+is now [3, 9, 10, 82]. Last step is merging [27, 38, 43] with [3, 9, 10, 82]. Compare 27 with 3,
+9, 10, and that's where the merging is going to happen: [3, 9, 10, 27, 38, 43, 82].
+
+
+	Implementing a merge-insertion sorting algorithm
+
+
+First of all you divide the list into sublists, then you use binary insertion sort on these sublists,
+eventually you merge the sublists. Wikipedia says:
+
+On an input X of n elements, merge-insertion works as follow:
+
+1. Group the elements of X into n/2 pairs of elements, leaving one element unpaired if there
+	is an odd number of elements.
+
+2. Perform n/2 comparisons to determine the larger element in each pair.
+
+3. Recursively sort the n/2 larger elements from each pair, creating a sorted sequence S of
+	n/2 elements in ascending order through the merge-insertion sort.
+
+4. Insert at the start of S the element that was paired with the first (and smallest) element
+	of S.
+
+5. Insert the remaining n/2 -1 elementsof X \ S into S one at a time, with a very specific
+	insertion ordering: binary search is used on sublists of S to determine the position
+	at which every element shall be inserted. More down below.
+
+So after step 4, you have this sublist: S = {x1, x2, x3, ...}
+And every element that is yet to be inserted, y(n), will be less than x(n).
