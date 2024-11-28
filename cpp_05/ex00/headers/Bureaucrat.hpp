@@ -5,7 +5,7 @@
 //              It is a member of the std::exception class
 // const    :   this function will not modify any member variables of the class
 // throw()  :   this has been deprecated from c++11. It is an exception specification and it tells the compiler this function will
-//              not throw any exception.
+//              not throw any exception. Only instances of the class can be thrown as exceptions.
 
 #ifndef BUREAUCRAT_HPP
 #define BUREAUCRAT_HPP
