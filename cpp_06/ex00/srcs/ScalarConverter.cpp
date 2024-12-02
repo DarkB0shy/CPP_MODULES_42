@@ -79,13 +79,13 @@ void ScalarConverter::convertToInt(const std::string &literal) {
     }
 }
 
-void ScalarConverter::convertToFloat(const std::string &literal) {
+void ScalarConverter::convertToFloat(const std::string &literal) {              // floats have a precision of up to 6 significant digits
     float floatValue = static_cast<float>(std::atof(literal.c_str()));
     if (floatValue == 0.0f && literal != "0" && literal != "0.0") {throw std::exception();}
-    std::cout << "float: " << std::fixed << std::setprecision(6) << floatValue << "f" << std::endl;
+    std::cout << "float: " /*<< std::fixed << std::setprecision(6)*/ << floatValue << "f" << std::endl;
 }
 
-void ScalarConverter::convertToDouble(const std::string &literal) {
+void ScalarConverter::convertToDouble(const std::string &literal) {             // the double type has a precision of 16 significant digits instead
     errno = 0;
     char* endPtr = nullptr;
     double doubleValue = static_cast<double>(std::strtod(literal.c_str(), &endPtr));
