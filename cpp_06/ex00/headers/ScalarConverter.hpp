@@ -1,6 +1,8 @@
 #ifndef SCALARCONVERTER_HPP
 #define SCALARCONVERTER_HPP
 
+#include <cstring>
+#include <stdexcept>
 #include <string>
 #include <iostream>
 #include <cstdlib>              // std::atoi, std::atof, ...
