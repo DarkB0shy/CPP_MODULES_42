@@ -3,13 +3,14 @@
 
 #include <stdexcept>
 #include <iostream>
+
 #define OUT_OF_BOUNDS "Invalid index"
 
 template <typename T>
 
 class Array {
     private:
-        T* _array;
+        T* _array;                                          // This is just a pointer to the memory that will be allocated once the constructor is called.
         unsigned int _size;
     public:
         Array();

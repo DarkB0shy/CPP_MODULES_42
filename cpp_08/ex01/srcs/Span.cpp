@@ -21,6 +21,13 @@ void Span::addNumber(int num) {
     _numbers.push_back(num);
 }
 
+void Span::addNumbers(const std::vector<int>::iterator& begin, const std::vector<int>::iterator& end) {
+    if (std::distance(begin, end) + _numbers.size() > _maxSize) {
+        throw std::out_of_range(OUT_OF_RANGE);
+    }
+    _numbers.insert(_numbers.end(), begin, end);
+}
+
 int Span::shortestSpan() const {
     if (_numbers.size() < 2) {throw std::logic_error(NOT_ENOUGH_NUMBS);}
     std::vector<int> sorted = _numbers;

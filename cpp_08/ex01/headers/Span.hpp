@@ -21,13 +21,14 @@ class Span {
         Span &operator=(const Span &spa);
         Span(unsigned int N);
         void addNumber(int num);
-        template <typename Iterator>
-        void addNumbers(Iterator begin, Iterator end) {
-            if (std::distance(begin, end) + _numbers.size() > _maxSize) {
-                throw std::out_of_range(OUT_OF_RANGE);
-            }
-            _numbers.insert(_numbers.end(), begin, end);                        // The insert method works differently depending on the type of parameters passed
-        }
+        void addNumbers(const std::vector<int>::iterator& begin, const std::vector<int>::iterator& end);
+        // template <typename Iterator>
+        // void addNumbers(Iterator begin, Iterator end) {
+        //     if (std::distance(begin, end) + _numbers.size() > _maxSize) {
+        //         throw std::out_of_range(OUT_OF_RANGE);
+        //     }
+        //     _numbers.insert(_numbers.end(), begin, end);                        // The insert method works differently depending on the type of parameters passed
+        // }
         void    printElements() const;
         int shortestSpan() const;
         int longestSpan() const;
