@@ -13,6 +13,45 @@
 
 ScalarConverter::ScalarConverter() {}
 
+void    checkInput(char * arg) {
+    std::string strarg = std::string(arg);
+    if (strarg == "nanf" || strarg == "+inff" || strarg == "-inff" ||
+        strarg == "nan" || strarg == "+inf" || strarg == "-inf") return ;
+    int i = 0;
+    int fflag = 0;
+    int dotflag = 0;
+    while (arg[i]) {
+        if (!isdigit(arg[i])) {
+            if (i != 0 && (arg[i] == '.' || arg[i] == 'f')) {
+                if (arg[i + 1] == 'f' || arg[i + 1] == '.') {
+                    std::cerr << "Error: invalid number format.\n";
+                    exit(2);
+                }
+                else ;
+            }
+            else {
+                std::cerr << "Error: invalid number format.\n";
+                exit(3);
+            }
+        }
+        if (arg[i] == '.') {
+            dotflag++;
+            i++;
+            continue;
+        }
+        if (arg[i] == 'f') {
+            fflag++;
+            i++;
+            continue;
+        }
+        i++;
+    }
+    if (dotflag > 1 || fflag > 1) {
+        std::cerr << "Error: invalid number format.\n";
+        exit(4);
+    }
+}
+
 void ScalarConverter::convert(const std::string &literal) {
     if (literal.empty()) {
         std::cerr << "Error: Empty literal." << std::endl;
@@ -29,8 +68,7 @@ void ScalarConverter::convert(const std::string &literal) {
     catch (const std::exception &e) {std::cerr << "int: impossible" << std::endl;}
     try {convertToFloat(literal);}
     catch (const std::exception &e) {std::cerr << "float: impossible" << std::endl;}
-    try {convertToDouble(literal);}
-    catch (const std::exception &e) {std::cerr << "double: impossible" << std::endl;}
+    convertToDouble(literal);
 }
 
 void ScalarConverter::handlePseudoLiterals(const std::string &literal) {
@@ -86,14 +124,19 @@ void ScalarConverter::convertToFloat(const std::string &literal) {              
 }
 
 void ScalarConverter::convertToDouble(const std::string &literal) {             // the double type has a precision of 16 significant digits instead
+    std::string newL(literal);
+    size_t pos = newL.find('f');
+    if (pos != std::string::npos) {
+        newL.erase(pos, 1);
+    }
     errno = 0;
     char* endPtr = nullptr;
-    double doubleValue = static_cast<double>(std::strtod(literal.c_str(), &endPtr));
+    double doubleValue = static_cast<double>(std::strtod(newL.c_str(), &endPtr));
     if (errno != 0 || *endPtr != '\0') {
         std::cout << "double: impossible" << std::endl;
         return;
     }
-    if (doubleValue == 0.0 && literal != "0" && literal != "0.0") {
+    if (doubleValue == 0.0 && newL != "0" && newL != "0.0") {
         std::cout << "double: impossible" << std::endl;
         return;
     }

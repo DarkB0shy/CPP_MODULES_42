@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
     //     std::cerr << "Nice try. That number is way too big old pal." << std::endl;
     //     return (2);
     // }
+    checkInput(argv[1]);
     ScalarConverter::convert(argv[1]);
     return (0);
 }
