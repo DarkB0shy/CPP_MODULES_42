@@ -32,13 +32,16 @@ double RPN::performOperation(char op, double a, double b) const {
 void RPN::validateExpression(const std::string &expression) const {
     int numCount = 0;
     for (size_t i = 0; i < expression.length(); ++i) {
-        if (isdigit(expression[i])) ++numCount;
+        if (isdigit(expression[i])) {
+            while (isdigit(expression[i])) i++;
+        }
         else if (expression[i] != '+' && expression[i] != '-' &&
                    expression[i] != '*' && expression[i] != '/' &&
                    expression[i] != ' ') {
             std::cerr << "Error: invalid character in expression." << std::endl;
             exit(1);
         }
+        numCount++;
     }
     if (numCount > 10) {
         std::cerr <<"Error: too many numbers in the expression." << std::endl;
